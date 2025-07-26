@@ -7,17 +7,9 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model User {
-  id        String   @id @default(cuid())
-  email     String   @unique
-  name      String?
-  sessions  Session[]
-  createdAt DateTime @default(now())
-}
-
 model Session {
   id         String   @id @default(cuid())
-  userId     String
+  userId     String   // This will store Clerk's userId directly
   title      String?
   transcript String?
   feedback   Json?
@@ -25,5 +17,5 @@ model Session {
   ended      Boolean  @default(false)
   createdAt  DateTime @default(now())
 
-  user       User     @relation(fields: [userId], references: [id])
+  @@index([userId]) // Add an index for better query performance
 }
